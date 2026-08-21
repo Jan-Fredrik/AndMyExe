@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/AndMyExe_img.png" alt="AndMyExe Logo" width="350">
+  <img src="images/AndMyExe_img2.png" alt="AndMyExe Logo" width="350">
 </p>
 
 
