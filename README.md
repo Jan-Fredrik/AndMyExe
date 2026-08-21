@@ -1,3 +1,8 @@
+<p align="center">
+  <img src="images/AndMyExe_img.png" alt="AndMyExe Logo" width="350">
+</p>
+
+
 # AndMyExe
 
 **AndMyExe** is a simple Python tool for creating Windows `.exe` files with customizable version information and file metadata.
