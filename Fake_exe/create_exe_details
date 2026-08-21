@@ -1,3 +1,4 @@
+import importlib.util
 import os
 import subprocess
 import sys
@@ -16,6 +17,34 @@ def get_input(prompt, default=""):
         return user_val if user_val else default
     else:
         return input(f"{prompt}: ").strip()
+
+
+def ensure_pyinstaller():
+    """Sjekker om PyInstaller finnes og tilbyr å installere det hvis det mangler."""
+    if importlib.util.find_spec("PyInstaller") is not None:
+        return True
+
+    print("\nPyInstaller er ikke installert.")
+    install_input = get_input("Vil du installere PyInstaller nå? (j/n)", "j").lower()
+
+    if install_input not in ("", "j", "ja", "y", "yes"):
+        print("PyInstaller må være installert for å bygge .exe-filen. Avslutter.")
+        return False
+
+    print("\nInstallerer PyInstaller...")
+    try:
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "pyinstaller"],
+            check=True
+        )
+        print("\nPyInstaller ble installert.")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"\nKunne ikke installere PyInstaller: {e}")
+        return False
+    except FileNotFoundError:
+        print("\nFant ikke Python/pip. Installer PyInstaller manuelt med 'python -m pip install pyinstaller'.")
+        return False
 
 def build_with_pyinstaller(py_file, version_file, onefile=True, noconsole=False):
     """Kjører PyInstaller som en undermodul."""
@@ -44,10 +73,14 @@ def generate_version_info():
     print("=== Generer VersionInfo og Bygg EXE ===")
     print("Trykk Enter for å bruke verdien i hakeskrapem [like dette].\n")
 
-    # 0. Finn mappen der dette skriptet kjører fra
+    # 0. Sjekk at PyInstaller finnes før vi fortsetter
+    if not ensure_pyinstaller():
+        return
+
+    # 1. Finn mappen der dette skriptet kjører fra
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # 1. Hent informasjon til versjonsfilen
+    # 2. Hent informasjon til versjonsfilen
     company_name = get_input("Selskaps navn", "Selskaps navn 2")
     file_description = get_input("FileDescription (kan stå tom)", "")
     
@@ -100,7 +133,7 @@ def generate_version_info():
         f.write(template)
     print(f"\nVersjonsfil ble lagret som '{version_filename}'.")
 
-    # 2. Hent riktig sti til målfilen
+    # 3. Hent riktig sti til målfilen
     print("\n--- PyInstaller Bygging ---")
     
     # Låser filstien til samme mappe på en portabel måte
@@ -112,7 +145,7 @@ def generate_version_info():
     noconsole_input = get_input("Skal konsollvinduet skjules (GUI-app)? (--noconsole) (j/n)", "n").lower()
     is_noconsole = noconsole_input in ("j", "ja", "y", "yes")
 
-    # 3. Kjør byggingen
+    # 4. Kjør byggingen
     build_with_pyinstaller(py_file, version_filename, onefile=is_onefile, noconsole=is_noconsole)
 
 if __name__ == "__main__":

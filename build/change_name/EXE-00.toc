@@ -3,7 +3,7 @@
  False,
  False,
  'C:\\Users\\jaffe\\OneDrive\\Documents\\GitHub\\AndMyExe\\.venv\\Lib\\site-packages\\PyInstaller\\bootloader\\images\\icon-console.ico',
- versioninfo.VSVersionInfo(ffi=versioninfo.FixedFileInfo(filevers=(2, 2, 2, 2), prodvers=(3, 3, 3, 3), mask=0x3f, flags=0x0, OS=0x40004, fileType=1, subtype=0x0, date=(0, 0)), kids=[versioninfo.StringFileInfo([versioninfo.StringTable('040904B0', [versioninfo.StringStruct('Selskaps navn', 'test 2'), versioninfo.StringStruct('FileDescription', 'Test nr 2'), versioninfo.StringStruct('FileVersion', '2.2.2.2'), versioninfo.StringStruct('InternalName', 'testerooni'), versioninfo.StringStruct('OriginalFilename', 'test dos'), versioninfo.StringStruct('ProductName', 'test tva'), versioninfo.StringStruct('ProductVersion', '3.3.3.3')])]), versioninfo.VarFileInfo([versioninfo.VarStruct('Translation', [1033, 1200])])]),
+ versioninfo.VSVersionInfo(ffi=versioninfo.FixedFileInfo(filevers=(5, 1, 2, 3), prodvers=(5, 5, 3, 2), mask=0x3f, flags=0x0, OS=0x40004, fileType=1, subtype=0x0, date=(0, 0)), kids=[versioninfo.StringFileInfo([versioninfo.StringTable('040904B0', [versioninfo.StringStruct('Selskaps navn', 'testr 3'), versioninfo.StringStruct('FileDescription', 'test 3'), versioninfo.StringStruct('FileVersion', '5.1.2.3'), versioninfo.StringStruct('InternalName', 'testr 3'), versioninfo.StringStruct('OriginalFilename', 'test 3'), versioninfo.StringStruct('ProductName', 'test 3'), versioninfo.StringStruct('ProductVersion', '5.5.3.2')])]), versioninfo.VarFileInfo([versioninfo.VarStruct('Translation', [1033, 1200])])]),
  False,
  False,
  b'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<assembly xmlns='
@@ -246,7 +246,7 @@
  [],
  False,
  False,
- 1787346602,
+ 1787348314,
  [('run.exe',
    'C:\\Users\\jaffe\\OneDrive\\Documents\\GitHub\\AndMyExe\\.venv\\Lib\\site-packages\\PyInstaller\\bootloader\\Windows-64bit-intel\\run.exe',
    'EXECUTABLE')],
