@@ -1,0 +1,119 @@
+import os
+import subprocess
+import sys
+
+def parse_version(version_str):
+    """Konverterer en versjonsstreng som '1.2.3.4' til en tuple (1, 2, 3, 4)."""
+    parts = [p.strip() for p in version_str.replace(",", ".").split(".") if p.strip()]
+    while len(parts) < 4:
+        parts.append("0")
+    return tuple(map(int, parts[:4]))
+
+def get_input(prompt, default=""):
+    """Hjelpefunksjon for å hente input med en valgfri standardverdi."""
+    if default:
+        user_val = input(f"{prompt} [{default}]: ").strip()
+        return user_val if user_val else default
+    else:
+        return input(f"{prompt}: ").strip()
+
+def build_with_pyinstaller(py_file, version_file, onefile=True, noconsole=False):
+    """Kjører PyInstaller som en undermodul."""
+    cmd = [sys.executable, "-m", "PyInstaller"]
+    
+    if onefile:
+        cmd.append("--onefile")
+    if noconsole:
+        cmd.append("--noconsole")
+        
+    cmd.extend([f"--version-file={version_file}", py_file])
+    
+    print("\n=== Kjører PyInstaller ===")
+    print("Kommando:", " ".join(cmd))
+    print("-" * 40)
+    
+    try:
+        subprocess.run(cmd, check=True)
+        print("\nSuksess! Byggingen fullført. Sjekk 'dist/'-mappen din for den ferdige filen.")
+    except subprocess.CalledProcessError as e:
+        print(f"\nFeil under kompilering med PyInstaller: {e}")
+    except FileNotFoundError:
+        print("\nFeil: Fant ikke Python/PyInstaller. Pass på at PyInstaller er installert (`pip install pyinstaller`).")
+
+def generate_version_info():
+    print("=== Generer VersionInfo og Bygg EXE ===")
+    print("Trykk Enter for å bruke verdien i hakeskrapem [like dette].\n")
+
+    # 0. Finn mappen der dette skriptet kjører fra
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # 1. Hent informasjon til versjonsfilen
+    company_name = get_input("Selskaps navn", "Selskaps navn 2")
+    file_description = get_input("FileDescription (kan stå tom)", "")
+    
+    file_version_str = get_input("FileVersion (f.eks. 1.0.0.0)", "1.0.0.0")
+    prod_version_str = get_input("ProductVersion (f.eks. 1.0.0.0)", file_version_str)
+    
+    internal_name = get_input("InternalName", "ProcessDemo")
+    original_filename = get_input("Originalt filnavn (OriginalFilename)", "originale filnavn")
+    product_name = get_input("Produkt navn (ProductName)", "produkt navn")
+
+    file_version_tuple = parse_version(file_version_str)
+    prod_version_tuple = parse_version(prod_version_str)
+
+    template = f"""VSVersionInfo(
+    ffi=FixedFileInfo(
+        filevers={file_version_tuple},
+        prodvers={prod_version_tuple},
+        mask=0x3f,
+        flags=0x0,
+        OS=0x40004,
+        fileType=0x1,
+        subtype=0x0,
+        date=(0, 0)
+    ),
+    kids=[
+        StringFileInfo([
+            StringTable(
+                '040904B0',
+                [
+                    StringStruct('Selskaps navn', '{company_name}'),
+                    StringStruct('FileDescription', '{file_description}'),
+                    StringStruct('FileVersion', '{file_version_str}'),
+                    StringStruct('InternalName', '{internal_name}'),
+                    StringStruct('OriginalFilename', '{original_filename}'),
+                    StringStruct('ProductName', '{product_name}'),
+                    StringStruct('ProductVersion', '{prod_version_str}')
+                ]
+            )
+        ]),
+        VarFileInfo([
+            VarStruct('Translation', [1033, 1200])
+        ])
+    ]
+)
+"""
+
+    # Lagrer versjonsfilen trygt i samme mappe som skriptet
+    version_filename = os.path.join(script_dir, "version_info.txt")
+    with open(version_filename, "w", encoding="utf-8") as f:
+        f.write(template)
+    print(f"\nVersjonsfil ble lagret som '{version_filename}'.")
+
+    # 2. Hent riktig sti til målfilen
+    print("\n--- PyInstaller Bygging ---")
+    
+    # Låser filstien til samme mappe på en portabel måte
+    py_file = os.path.join(script_dir, "change_name.py")
+
+    onefile_input = get_input("Vil du pakke alt inn i én enkelt .exe-fil? (--onefile) (j/n)", "j").lower()
+    is_onefile = onefile_input in ("", "j", "ja", "y", "yes")
+
+    noconsole_input = get_input("Skal konsollvinduet skjules (GUI-app)? (--noconsole) (j/n)", "n").lower()
+    is_noconsole = noconsole_input in ("j", "ja", "y", "yes")
+
+    # 3. Kjør byggingen
+    build_with_pyinstaller(py_file, version_filename, onefile=is_onefile, noconsole=is_noconsole)
+
+if __name__ == "__main__":
+    generate_version_info()
