@@ -363,6 +363,3 @@ Changing fields such as the Product Name, Company Name, Internal Name, or Origin
 
 For trusted software distribution, executables should be digitally signed using an appropriate code-signing certificate.
 
-## License
-
-Add your preferred license here.
