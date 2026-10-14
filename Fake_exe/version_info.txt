@@ -14,12 +14,12 @@ VSVersionInfo(
             StringTable(
                 '040904B0',
                 [
-                    StringStruct('Selskaps navn', 'Where Winds Meet'),
-                    StringStruct('FileDescription', 'Application'),
+                    StringStruct('Selskaps navn', 'egg'),
+                    StringStruct('FileDescription', 'egg'),
                     StringStruct('FileVersion', '1.0.0.0'),
-                    StringStruct('InternalName', 'wwm'),
-                    StringStruct('OriginalFilename', 'wwm'),
-                    StringStruct('ProductName', 'Where Winds Meet'),
+                    StringStruct('InternalName', 'egg'),
+                    StringStruct('OriginalFilename', 'egg'),
+                    StringStruct('ProductName', 'egg'),
                     StringStruct('ProductVersion', '1.0.0.0')
                 ]
             )

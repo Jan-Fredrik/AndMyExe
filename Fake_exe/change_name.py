@@ -1,4 +1,5 @@
 import time
 
 print("Discord fake .exe fil")
-input("Trykk enter for å avslutte")
+print("Avslutter seg selv etter 15 minutter og 10 sekunder")
+time.sleep(15 * 60 + 10)
